@@ -1,0 +1,21 @@
+main:
+    print .message1
+    print .message2
+    print .message3
+    menu #0, .options
+    jumptable #0
+    dw Max_IVs
+
+.message1
+    string "Mathy's Conquest Save File Tools v0.0"
+.message2
+    string "Use only for a Pokemon Conquest (USA) save file."
+.message3
+    string "What would you like to do?"
+.options
+    dw .option1
+    dw -1
+.option1
+    string "Max out all IVs (only option currently)"
+
+    include "maxivs.bsps"

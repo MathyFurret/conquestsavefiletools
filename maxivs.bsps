@@ -1,0 +1,58 @@
+    define GALLERY_BLOCK_OFFSET, 0x78b6
+    define HEADER_LENGTH, 0x18
+    define WARRIOR_LIST_LENGTH, 0xe10
+    define TOTAL_LENGTH, 0x3c84
+
+    define FORRETRESS, 56
+    define NUM_POKEMON, 1000
+
+    define i, 0
+    define species, 1
+    define checksum, 2
+
+Max_IVs:
+    add #0, GALLERY_BLOCK_OFFSET, HEADER_LENGTH
+    add #0, WARRIOR_LIST_LENGTH
+    seek #0
+    xor #i, #i
+.loop
+    readword #species
+    and #species, 0xff
+
+    lockpos
+    readword #2
+    or #2, 0x3fff8000
+    unlockpos
+    writeword #2
+
+    lockpos
+    readword #2
+    unlockpos
+    ifne #species, FORRETRESS, .not_forretress
+
+    xor #3, 0x1f, 0xffffffff
+    and #2, #3
+    jump .endif
+.not_forretress
+    or #2, 0x1f
+.endif
+    writeword #2
+
+    increment #i
+    iflt #i, NUM_POKEMON, .loop
+
+    ; calculate checksum
+    add #0, GALLERY_BLOCK_OFFSET, HEADER_LENGTH
+    seek #0
+    xor #i, #i
+    xor #checksum, #checksum
+.checksum_loop
+    readbyte #3
+    add #checksum, #3
+    increment #i
+    iflt #i, TOTAL_LENGTH, .checksum_loop
+
+    seek GALLERY_BLOCK_OFFSET
+    writeword #checksum
+
+    return

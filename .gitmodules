@@ -1,0 +1,4 @@
+[submodule "bsp"]
+	path = bsp
+	url = https://github.com/aaaaaa123456789/bsp
+	ignore = dirty
