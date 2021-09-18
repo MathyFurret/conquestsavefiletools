@@ -4,7 +4,7 @@ BSP scrips that work on Pokemon Conquest save data
 
 ## Download the patch script
 
-(todo: add releases page)
+See the [releases](https://github.com/MathyFurret/conquestsavefiletools/releases).
 
 ## Building the project yourself
 
