@@ -13,8 +13,7 @@ main:
 .message3
     string "What would you like to do?"
 .options
-    dw .option1
-    dw -1
+    dw .option1, -1
 .option1
     string "Max out all IVs (only option currently)"
 

@@ -1,19 +1,30 @@
     define GALLERY_BLOCK_OFFSET, 0x78b6
     define HEADER_LENGTH, 0x18
     define WARRIOR_LIST_LENGTH, 0xe10
-    define TOTAL_LENGTH, 0x3c84
 
     define FORRETRESS, 56
-    define NUM_POKEMON, 1000
 
     define i, 0
     define species, 1
     define checksum, 2
+    define forretress_override, 3
+    define total_length, 4
+    define num_pokemon, 5
 
 Max_IVs:
-    add #0, GALLERY_BLOCK_OFFSET, HEADER_LENGTH
-    add #0, WARRIOR_LIST_LENGTH
-    seek #0
+    print .message
+    menu #forretress_override, .options
+
+    seek GALLERY_BLOCK_OFFSET
+    seekfwd 4
+    readword #total_length
+    shiftright #total_length, 9
+
+    seekfwd 0x10
+    seekfwd WARRIOR_LIST_LENGTH
+
+    subtract #0, #total_length, WARRIOR_LIST_LENGTH
+    divide #num_pokemon, #0, 0xc
     xor #i, #i
 .loop
     readword #species
@@ -28,6 +39,7 @@ Max_IVs:
     lockpos
     readword #2
     unlockpos
+    jumpnz #forretress_override, .not_forretress
     ifne #species, FORRETRESS, .not_forretress
 
     xor #3, 0x1f, 0xffffffff
@@ -39,7 +51,7 @@ Max_IVs:
     writeword #2
 
     increment #i
-    iflt #i, NUM_POKEMON, .loop
+    iflt #i, #num_pokemon, .loop
 
     ; calculate checksum
     add #0, GALLERY_BLOCK_OFFSET, HEADER_LENGTH
@@ -50,9 +62,18 @@ Max_IVs:
     readbyte #3
     add #checksum, #3
     increment #i
-    iflt #i, TOTAL_LENGTH, .checksum_loop
+    iflt #i, #total_length, .checksum_loop
 
     seek GALLERY_BLOCK_OFFSET
     writeword #checksum
 
     return
+
+.message
+    string "I can automatically give 0 Speed IVs to any Forretress. Would you like this?"
+.yes
+    string "Yes"
+.no
+    string "No"
+.options
+    dw .yes, .no, -1
