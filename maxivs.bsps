@@ -1,4 +1,5 @@
-    define GALLERY_BLOCK_OFFSET, 0x78b6
+    define GALLERY_BLOCK_OFFSET1, 0x78b6
+    define GALLERY_BLOCK_OFFSET2, 0x12e74
     define HEADER_LENGTH, 0x18
     define WARRIOR_LIST_LENGTH, 0xe10
 
@@ -10,12 +11,29 @@
     define forretress_override, 3
     define total_length, 4
     define num_pokemon, 5
+    define block_offset, 6
 
 Max_IVs:
     print .message
     menu #forretress_override, .options
 
-    seek GALLERY_BLOCK_OFFSET
+    set #block_offset, GALLERY_BLOCK_OFFSET1
+    call Max_IVs_Patch
+    set #block_offset, GALLERY_BLOCK_OFFSET2
+    call Max_IVs_Patch
+    return
+
+.message
+    string "I can automatically give 0 Speed IVs to any Forretress. Would you like this?"
+.yes
+    string "Yes"
+.no
+    string "No"
+.options
+    dw .yes, .no, -1
+
+Max_IVs_Patch:
+    seek #block_offset
     seekfwd 4
     readword #total_length
     shiftright #total_length, 9
@@ -54,7 +72,7 @@ Max_IVs:
     iflt #i, #num_pokemon, .loop
 
     ; calculate checksum
-    add #0, GALLERY_BLOCK_OFFSET, HEADER_LENGTH
+    add #0, #block_offset, HEADER_LENGTH
     seek #0
     xor #i, #i
     xor #checksum, #checksum
@@ -64,16 +82,7 @@ Max_IVs:
     increment #i
     iflt #i, #total_length, .checksum_loop
 
-    seek GALLERY_BLOCK_OFFSET
+    seek #block_offset
     writeword #checksum
-
+    
     return
-
-.message
-    string "I can automatically give 0 Speed IVs to any Forretress. Would you like this?"
-.yes
-    string "Yes"
-.no
-    string "No"
-.options
-    dw .yes, .no, -1
