@@ -60,8 +60,8 @@ Max_IVs_Patch:
     jumpnz #forretress_override, .not_forretress
     ifne #species, FORRETRESS, .not_forretress
 
-    xor #3, 0x1f, 0xffffffff
-    and #2, #3
+    xor #1, 0x1f, 0xffffffff
+    and #2, #1
     jump .endif
 .not_forretress
     or #2, 0x1f
@@ -77,8 +77,8 @@ Max_IVs_Patch:
     xor #i, #i
     xor #checksum, #checksum
 .checksum_loop
-    readbyte #3
-    add #checksum, #3
+    readbyte #1
+    add #checksum, #1
     increment #i
     iflt #i, #total_length, .checksum_loop
 
