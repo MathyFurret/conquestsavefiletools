@@ -48,15 +48,11 @@ Max_IVs_Patch:
     readword #species
     and #species, 0xff
 
-    lockpos
-    readword #2
+    getfileword #2
     or #2, 0x3fff8000
-    unlockpos
     writeword #2
 
-    lockpos
-    readword #2
-    unlockpos
+    getfileword #2
     jumpnz #forretress_override, .not_forretress
     ifne #species, FORRETRESS, .not_forretress
 
