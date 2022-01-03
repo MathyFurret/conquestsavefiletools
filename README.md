@@ -1,6 +1,8 @@
 # Conquest Save File Patcher
 
-BSP scrips that work on Pokemon Conquest save data
+BSP scrips that work on Pokemon Conquest save data.
+
+It is only known to work on the original US version of Pokemon Conquest. Support for romhacks such as party size expansion is a [planned feature](https://github.com/MathyFurret/conquestsavefiletools/issues/1).
 
 ## Download the patch script
 
