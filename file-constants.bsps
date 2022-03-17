@@ -1,0 +1,4 @@
+    define GALLERY_BLOCK_OFFSET1, 0x78b6
+    define GALLERY_BLOCK_OFFSET2, 0x12e74
+    define HEADER_LENGTH, 0x18
+    define WARRIOR_LIST_LENGTH, 0xe10

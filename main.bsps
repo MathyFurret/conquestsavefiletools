@@ -17,4 +17,5 @@ main:
 .option1
     string "Max out all IVs (only option currently)"
 
+    include "file-constants.bsps"
     include "maxivs.bsps"
