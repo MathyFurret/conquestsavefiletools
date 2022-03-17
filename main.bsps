@@ -5,6 +5,7 @@ main:
     menu #0, .options
     jumptable #0
     dw Max_IVs
+    dw Average_IVs
 
 .message1
     string "Mathy's Conquest Save File Tools v0.0"
@@ -13,9 +14,12 @@ main:
 .message3
     string "What would you like to do?"
 .options
-    dw .option1, -1
+    dw .option1, .option2, -1
 .option1
-    string "Max out all IVs (only option currently)"
+    string "Max out all Gallery IVs"
+.option2
+    string "Set all Gallery IVs to 15"
 
     include "file-constants.bsps"
     include "maxivs.bsps"
+    include "average-ivs.bsps"

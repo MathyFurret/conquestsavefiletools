@@ -1,33 +1,17 @@
-    define FORRETRESS, 56
-
     define i, 0
-    define species, 1
     define checksum, 2
-    define forretress_override, 3
     define total_length, 4
     define num_pokemon, 5
     define block_offset, 6
 
-Max_IVs:
-    print .message
-    menu #forretress_override, .options
-
+Average_IVs:
     set #block_offset, GALLERY_BLOCK_OFFSET1
-    call Max_IVs_Patch
+    call Average_IVs_Patch
     set #block_offset, GALLERY_BLOCK_OFFSET2
-    call Max_IVs_Patch
+    call Average_IVs_Patch
     return
 
-.message
-    string "I can automatically give 0 Speed IVs to any Forretress. Would you like this?"
-.yes
-    string "Yes"
-.no
-    string "No"
-.options
-    dw .yes, .no, -1
-
-Max_IVs_Patch:
+Average_IVs_Patch:
     seek #block_offset
     readword #2 ; dummy read
     readword #total_length
@@ -40,23 +24,16 @@ Max_IVs_Patch:
     divide #num_pokemon, #0, 0xc
     xor #i, #i
 .loop
-    readword #species
-    and #species, 0xff
+    readword #2 ; dummy read
 
     getfileword #2
-    or #2, 0x3fff8000
+    and #2, 0xc0007fff
+    or #2, 0x1ef78000
     writeword #2
 
     getfileword #2
-    jumpnz #forretress_override, .not_forretress
-    ifne #species, FORRETRESS, .not_forretress
-
-    xor #1, 0x1f, 0xffffffff
-    and #2, #1
-    jump .endif
-.not_forretress
-    or #2, 0x1f
-.endif
+    and #2, 0xffffffe0
+    or #2, 0x0f
     writeword #2
 
     increment #i
